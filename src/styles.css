@@ -191,6 +191,8 @@ button {
 .cta-button,
 .menu-trigger,
 .ghost-button,
+.room-panel,
+.room-nav__button,
 .connection-list button,
 .rooms-menu__list button,
 .info-toggle,
@@ -255,6 +257,48 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+}
+
+.room-panel__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.room-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.room-nav__button {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.room-nav__button:hover:not(:disabled) {
+  background: rgba(214, 188, 142, 0.12);
+  border-color: rgba(214, 188, 142, 0.36);
+  color: var(--accent-strong);
+  transform: translateY(-1px);
+}
+
+.room-nav__button:disabled {
+  opacity: 0.34;
+  cursor: default;
 }
 
 .room-panel h2 {
@@ -559,6 +603,14 @@ button {
   .room-panel {
     bottom: 1.25rem;
     width: auto;
+  }
+
+  .room-panel__header {
+    align-items: flex-start;
+  }
+
+  .room-panel__actions {
+    gap: 0.5rem;
   }
 
   .room-chip {

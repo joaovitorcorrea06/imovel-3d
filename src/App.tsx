@@ -71,7 +71,6 @@ const App = () => {
         hero={heroCopy}
         points={tourPoints}
         currentPoint={currentPoint}
-        connections={currentPoint.connections}
         introPhase={introPhase}
         infoVisible={infoVisible}
         isTransitioning={isTransitioning}

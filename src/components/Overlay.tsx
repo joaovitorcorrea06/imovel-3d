@@ -1,4 +1,4 @@
-import type { TourConnection, TourPoint } from '../data/tour';
+import type { TourPoint } from '../data/tour';
 
 type OverlayProps = {
   hero: {
@@ -9,7 +9,6 @@ type OverlayProps = {
   };
   points: TourPoint[];
   currentPoint: TourPoint;
-  connections: TourConnection[];
   introPhase: 'visible' | 'exiting' | 'hidden';
   infoVisible: boolean;
   isTransitioning: boolean;
@@ -48,27 +47,57 @@ const Intro = ({
 );
 
 const RoomInfo = ({
+  points,
   point,
   visible,
   isTransitioning,
   onToggleInfo,
+  onRequestNavigate,
 }: {
+  points: TourPoint[];
   point: TourPoint;
   visible: boolean;
   isTransitioning: boolean;
   onToggleInfo: () => void;
+  onRequestNavigate: (targetId: string) => void;
 }) => {
   if (!visible || isTransitioning) {
     return null;
   }
 
+  const currentIndex = points.findIndex((item) => item.id === point.id);
+  const previousPoint = currentIndex > 0 ? points[currentIndex - 1] : null;
+  const nextPoint = currentIndex >= 0 && currentIndex < points.length - 1 ? points[currentIndex + 1] : null;
+
   return (
     <aside className="room-panel">
       <div className="room-panel__header">
         <span className="eyebrow">{point.eyebrow}</span>
-        <button type="button" className="ghost-button" onClick={onToggleInfo}>
-          Ocultar
-        </button>
+        <div className="room-panel__actions">
+          <div className="room-nav" aria-label="Navegação entre ambientes">
+            <button
+              type="button"
+              className="room-nav__button"
+              onClick={() => previousPoint && onRequestNavigate(previousPoint.id)}
+              aria-label={previousPoint ? `Ir para ${previousPoint.name}` : 'Sem ambiente anterior'}
+              disabled={!previousPoint}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              className="room-nav__button"
+              onClick={() => nextPoint && onRequestNavigate(nextPoint.id)}
+              aria-label={nextPoint ? `Ir para ${nextPoint.name}` : 'Sem próximo ambiente'}
+              disabled={!nextPoint}
+            >
+              →
+            </button>
+          </div>
+          <button type="button" className="ghost-button" onClick={onToggleInfo}>
+            Ocultar
+          </button>
+        </div>
       </div>
       <h2>{point.title}</h2>
       <p>{point.description}</p>
@@ -130,7 +159,6 @@ export const Overlay = ({
   hero,
   points,
   currentPoint,
-  connections,
   introPhase,
   infoVisible,
   isTransitioning,
@@ -164,10 +192,12 @@ export const Overlay = ({
           />
 
           <RoomInfo
+            points={points}
             point={currentPoint}
             visible={infoVisible}
             isTransitioning={isTransitioning}
             onToggleInfo={onToggleInfo}
+            onRequestNavigate={onRequestNavigate}
           />
 
           {!infoVisible ? (
