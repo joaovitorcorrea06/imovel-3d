@@ -1,157 +1,108 @@
-# imovel-3d
+# Imovel 3D
 
-Aplicação web para apresentação de um imóvel em 3D com navegação entre ambientes, câmera interativa e interface de tour virtual com foco em experiência imobiliária premium.
+> Tour virtual imersivo para apresentacao de imoveis em 3D.
 
-## Visão geral
+Uma experiencia digital para explorar uma residencia ambiente por ambiente, com modelo 3D interativo, navegacao guiada e transicoes suaves de camera. A base foi pensada para ser adaptada a diferentes imoveis com poucos ajustes de conteudo e posicionamento.
 
-O projeto renderiza um modelo `.glb` de uma casa usando `Three.js` via `@react-three/fiber`, com uma camada de interface em `React` para:
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=061017)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?logo=vite&logoColor=white)
+![Three.js](https://img.shields.io/badge/Three.js-3D-000000?logo=three.js&logoColor=white)
+![Status](https://img.shields.io/badge/status-tour%203D-1B998B)
 
-- iniciar o tour com uma tela de entrada;
-- navegar entre ambientes por hotspots e menu lateral;
-- exibir informações contextuais de cada cômodo;
-- animar transições de câmera entre pontos estratégicos;
-- compartilhar links diretos para um ambiente usando `hash` na URL.
+## O que esta incluso
 
-## Stack
+- Experiencia de entrada para iniciar o tour virtual.
+- Modelo 3D interativo com controles de camera e renderizacao em tempo real.
+- Navegacao entre ambientes por hotspots e menu lateral.
+- Transicoes de camera animadas entre pontos estrategicos do imovel.
+- Painel com informacoes contextuais de cada comodo.
+- Links diretos para ambientes usando o `hash` da URL.
+- Layout responsivo para desktop e mobile.
+- Configuracao centralizada para adaptar o tour a outro imovel.
 
-- React 19
-- TypeScript
-- Vite
-- Three.js
-- `@react-three/fiber`
-- `@react-three/drei`
-- GSAP
+## Tecnologias
 
-## Como rodar
+| Area | Stack |
+| --- | --- |
+| Interface | React 19 + TypeScript + Vite 7 |
+| Cena 3D | Three.js, React Three Fiber e Drei |
+| Animacao | GSAP |
+| Estilos | CSS global responsivo |
 
-### Requisitos
+## Comecar
 
-- Node.js 20+ recomendado
-- npm
+### Pre-requisitos
 
-### Instalação
+- Node.js 20 ou superior
+- npm 10 ou superior
+
+### Rodar localmente
 
 ```bash
 npm install
-```
-
-### Ambiente de desenvolvimento
-
-```bash
 npm run dev
 ```
 
-O Vite abrirá a aplicação localmente, normalmente em `http://localhost:5173`.
+Abra o endereco informado pelo Vite, normalmente `http://localhost:5173`.
 
-### Build de produção
+### Gerar build de producao
 
 ```bash
 npm run build
-```
-
-### Preview da build
-
-```bash
 npm run preview
 ```
 
-## Estrutura principal
+## Personalizacao
 
-```text
-.
-├── 3d-model/
-│   └── 3_bedroom_house.glb
-├── src/
-│   ├── components/
-│   │   ├── ExperienceCanvas.tsx
-│   │   ├── Overlay.tsx
-│   │   └── TourHotspots.tsx
-│   ├── data/
-│   │   └── tour.ts
-│   ├── lib/
-│   │   └── tour-routing.ts
-│   ├── App.tsx
-│   ├── main.tsx
-│   └── styles.css
-├── index.html
-├── package.json
-└── vite.config.ts
-```
+O conteudo e o comportamento principal do tour estao concentrados em [`src/data/tour.ts`](src/data/tour.ts). Atualize ali:
 
-## Onde editar o tour
+- textos da tela inicial em `heroCopy`;
+- nome, descricao e identificador de cada ambiente em `tourPoints`;
+- posicao e alvo da camera para cada ponto;
+- conexoes, hotspots e caminhos intermediarios;
+- parametros de camera e movimentacao automatica.
 
-### Conteúdo dos ambientes
+A logica de rotas e waypoints fica em [`src/lib/tour-routing.ts`](src/lib/tour-routing.ts). A apresentacao visual fica em [`src/components/ExperienceCanvas.tsx`](src/components/ExperienceCanvas.tsx), [`src/components/Overlay.tsx`](src/components/Overlay.tsx) e [`src/styles.css`](src/styles.css).
 
-O arquivo `src/data/tour.ts` concentra a configuração principal do tour:
-
-- textos da home de entrada (`heroCopy`);
-- lista de ambientes (`tourPoints`);
-- posição da câmera em cada ambiente;
-- alvo padrão da câmera;
-- conexões entre os pontos;
-- hotspots e caminhos intermediários;
-- parâmetros de câmera e comportamento automático.
-
-Se você quiser adicionar um novo cômodo, o ponto de entrada é esse arquivo.
-
-### Regras de navegação e movimento
-
-O arquivo `src/lib/tour-routing.ts` contém a lógica para:
-
-- indexar os pontos do tour;
-- encontrar rotas entre ambientes;
-- gerar waypoints intermediários;
-- calcular direção, ângulos e distância da câmera.
-
-### Interface e apresentação
-
-- `src/components/ExperienceCanvas.tsx`: renderização 3D, câmera, transições e carregamento do modelo.
-- `src/components/Overlay.tsx`: intro, painel do ambiente, menu de navegação e dicas visuais.
-- `src/styles.css`: identidade visual, layout e responsividade da interface.
-
-## Modelo 3D
-
-O modelo atual está em:
-
-```text
-3d-model/3_bedroom_house.glb
-```
-
-O projeto assume esse arquivo como fonte principal do imóvel renderizado.
-
-Em `src/data/tour.ts`, existe uma conversão de unidades baseada em polegadas para metros. Se o próximo modelo vier com outra escala ou outro ponto de origem, será necessário revisar:
-
-- `MODEL_CENTER`
-- `INCH_TO_METER`
-- `modelInspection`
-- posições dos `tourPoints`
-
-## Navegação por URL
-
-O tour mantém o ambiente atual no `hash` da URL. Exemplo:
+Para abrir diretamente um ambiente, use o respectivo identificador na URL:
 
 ```text
 http://localhost:5173/#living
 ```
 
-Ao abrir o link, a aplicação tenta iniciar naquele ponto, desde que o `id` exista em `tourPoints`.
+## Ativos visuais
 
-## Ambientes configurados hoje
+| Caminho | Uso |
+| --- | --- |
+| `3d-model/3_bedroom_house.glb` | Modelo 3D principal do imovel. |
+| `src/data/tour.ts` | Dados, escala e pontos de navegacao do modelo. |
 
-No estado atual do projeto, o tour inclui:
+Ao substituir o modelo `.glb`, revise `MODEL_CENTER`, `INCH_TO_METER`, `modelInspection` e as posicoes de `tourPoints` em `src/data/tour.ts` para manter a camera alinhada ao novo arquivo.
 
-- Entrada
-- Sala de estar
-- Cozinha
-- Corredor
-- Quarto 01
-- Suíte master
-- Quarto 02
+## Estrutura
 
-## Próximos ajustes possíveis
+```text
+src/
+  components/
+    ExperienceCanvas.tsx      Cena 3D, camera e transicoes
+    Overlay.tsx               Interface, menu e informacoes do tour
+    TourHotspots.tsx          Pontos interativos da cena
+  data/tour.ts                Conteudo e configuracoes do tour
+  lib/tour-routing.ts         Rotas e calculos de navegacao
+  App.tsx                     Composicao principal da aplicacao
+  styles.css                  Tokens e estilos globais
+3d-model/
+  3_bedroom_house.glb         Modelo 3D do imovel
+```
 
-- adicionar analytics de interação no tour;
-- incluir minimapa ou planta com navegação;
-- suportar múltiplos imóveis no mesmo projeto;
-- carregar dados do tour a partir de JSON ou CMS;
-- adicionar fallback para mobile com controles guiados.
+## Scripts
+
+| Comando | Descricao |
+| --- | --- |
+| `npm run dev` | Inicia o servidor de desenvolvimento. |
+| `npm run build` | Valida o TypeScript e cria a versao otimizada para producao. |
+| `npm run preview` | Serve localmente o build de producao. |
+
+---
+
+Feito para transformar a apresentacao de um imovel em uma experiencia de visita memoravel.
